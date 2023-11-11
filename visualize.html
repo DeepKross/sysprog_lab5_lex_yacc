@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <title>Visualization of AST by Mike Tanchuk</title>
+</head>
+<body>
+<header>
+    <h1>Візуалізація AST</h1>
+</header>
+<main>
+    <section>
+        <h2>Введіть JSON</h2>
+        <textarea id="json-input" rows="10" cols="50"></textarea>
+        <button id="visualize-button">Візуалізувати</button>
+    </section>
+    <section id="ast">
+        <!-- Тут буде візуалізація AST -->
+    </section>
+</main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById('visualize-button').addEventListener('click', function () {
+            var input = document.getElementById('json-input').value;
+            try {
+                var ast = JSON.parse(input);
+
+                // Ваш код для візуалізації AST за допомогою d3.js
+                visualizeAST(ast);
+            } catch (e) {
+                alert('Невірний формат JSON');
+            }
+        });
+    });
+
+    function visualizeAST(ast) {
+        // Очищення попередньої візуалізації
+        d3.select("#ast").html("");
+
+        const margin = {top: 20, right: 90, bottom: 30, left: 90},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
+
+        // Створення SVG контейнера
+        const svg = d3.select("#ast").append("svg")
+            .attr("width", width + margin.right + margin.left)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Створення ієрархічної структури даних
+        var root = d3.hierarchy(ast, function (d) {
+            return [d.left, d.right].filter(Boolean);
+        });
+
+        // Створення деревоподібної структури
+        var treeLayout = d3.tree().size([height, width]);
+        treeLayout(root);
+
+        // Створення зв'язків між вузлами
+        svg.selectAll('.link')
+            .data(root.descendants().slice(1))
+            .enter().append('path')
+            .attr("class", "link")
+            .attr('d', function (d) {
+                return "M" + d.y + "," + d.x
+                    + "C" + (d.y + d.parent.y) / 2 + "," + d.x
+                    + " " + (d.y + d.parent.y) / 2 + "," + d.parent.x
+                    + " " + d.parent.y + "," + d.parent.x;
+            });
+
+        // Створення вузлів
+        var node = svg.selectAll('.node')
+            .data(root.descendants())
+            .enter().append('g')
+            .attr("class", "node")
+            .attr("transform", function (d) {
+                return "translate(" + d.y + "," + d.x + ")";
+            });
+
+        // Кола для вузлів
+        node.append('circle')
+            .attr("r", 10);
+
+        // Текст для вузлів
+        node.append('text')
+            .attr("dy", ".35em")
+            .attr("x", function (d) {
+                return d.children ? -13 : 13;
+            })
+            .style("text-anchor", function (d) {
+                return d.children ? "end" : "start";
+            })
+            .text(function (d) {
+                return d.data.type;
+            });
+    }
+
+</script>
+
+</body>
+</html>
