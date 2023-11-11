@@ -3,21 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
     <title>Visualization of AST by Mike Tanchuk</title>
 </head>
 <body>
-<header>
-    <h1>Візуалізація AST</h1>
-</header>
 <main>
-    <section>
+    <section id="json-input-section">
         <h2>Введіть JSON</h2>
-        <textarea id="json-input" rows="10" cols="50"></textarea>
+        <textarea id="json-input"></textarea>
         <button id="visualize-button">Візуалізувати</button>
+        <div id="ast" class="ast-visualization"></div> <!-- Container for d3.js visualization -->
     </section>
-    <section id="ast">
-        <!-- Тут буде візуалізація AST -->
-    </section>
+    <div id="ast-visualization-info">
+        <h2>AST Visualization Tool</h2>
+        <p class="overview">An advanced software solution designed to parse and visually represent Abstract Syntax Trees (AST) for mathematical expressions.</p>
+
+        <h3>Key Features</h3>
+        <ul>
+            <li><strong>Lexer (lexer.l):</strong> Lexical analysis, converting characters into tokens.</li>
+            <li><strong>Parser (parser.y):</strong> Transformation of tokens into an AST.</li>
+            <li><strong>D3.js Visualization:</strong> Web-based, interactive AST visualization.</li>
+        </ul>
+
+        <h3>How It Works</h3>
+        <ol>
+            <li>Lexical Analysis: Breaking down mathematical expressions into tokens.</li>
+            <li>Parsing: Constructing an AST from tokens.</li>
+            <li>Visualization: Rendering the AST in a web interface using D3.js.</li>
+        </ol>
+
+        <h3>Usage Scenario</h3>
+        <p>Ideal for educational purposes and for professionals in computational linguistics, language processing, and software engineering.</p>
+
+        <h3>Technical Stack</h3>
+        <ul>
+            <li><strong>Lexer:</strong> Flex - a fast lexical analyser generator.</li>
+            <li><strong>Parser:</strong> Bison - part of the GNU Project.</li>
+            <li><strong>Visualization:</strong> D3.js for dynamic, interactive web visualizations.</li>
+        </ul>
+
+        <h3>Getting Started</h3>
+        <p>Clone the repository, compile the lexer and parser, and launch the web interface. Input a mathematical expression to visualize its AST.</p>
+
+        <h3>License</h3>
+        <p>Released under the MIT License, promoting open-source usage and collaboration.</p>
+    </div>
 </main>
 
 <script>
